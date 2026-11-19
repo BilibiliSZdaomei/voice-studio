@@ -1,0 +1,25 @@
+{
+  "runtime_python": "",
+  "encoder": "",
+  "decoder": "",
+  "tokens": "",
+  "lexicon": "",
+  "vocoder": "",
+  "reference_audio": "",
+  "reference_text": "",
+  "accepted_sample": "",
+  "num_threads": 4,
+  "rewrite": {
+    "enabled": false,
+    "base_url": "http://127.0.0.1:11435/v1",
+    "model": "",
+    "max_input_chars": 600,
+    "max_output_tokens": 800
+  },
+  "video": {
+    "node": "",
+    "hyperframes_cli": "",
+    "browser": "",
+    "font": ""
+  }
+}

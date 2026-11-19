@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=@@WIDTH@@, height=@@HEIGHT@@">
+  <title>@@TITLE@@</title>
+  <script src="assets/gsap.min.js"></script>
+  <style>body { margin: 0; } #main { position: relative; width: 100%; height: 100%; overflow: hidden; }</style>
+</head>
+<body>
+  <div id="main" data-composition-id="main" data-start="0" data-duration="@@DURATION@@" data-width="@@WIDTH@@" data-height="@@HEIGHT@@">
+    <div id="voice-caption" class="clip" data-composition-id="voice-caption" data-composition-src="compositions/captions.html" data-start="0" data-duration="@@DURATION@@" data-width="@@WIDTH@@" data-height="@@HEIGHT@@" data-track-index="2" data-track-kind="captions" style="position:absolute;inset:0"></div>
+    @@HOST_TRACK@@
+    <audio id="narration" class="clip" src="assets/narration.wav" data-start="0" data-duration="@@DURATION@@" data-track-index="1" data-volume="1"></audio>
+  </div>
+  <script>window.__timelines['main'] = gsap.timeline({paused: true});</script>
+</body>
+</html>

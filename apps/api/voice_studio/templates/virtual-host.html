@@ -1,0 +1,102 @@
+<template>
+  <style>
+    @font-face { font-family: HostCaption; src: url('assets/fonts/caption-font.ttc'); font-weight: 100 900; }
+    #root { position: absolute; inset: 0; width: 100%; height: 100%; overflow: hidden; background: transparent; pointer-events: none; }
+    #voice-host-stage { position: absolute; left: @@LEFT@@px; top: @@TOP@@px; width: 540px; height: 580px; }
+    #voice-host-art { display: block; width: 540px; height: 580px; overflow: visible; }
+    #voice-host-label { font-family: HostCaption, sans-serif; font-size: 28px; font-weight: 500; letter-spacing: 3px; fill: #76566f; }
+  </style>
+  <div id="root" data-composition-id="voice-host" data-start="0" data-duration="@@DURATION@@" data-width="@@WIDTH@@" data-height="@@HEIGHT@@" data-avatar-id="studio-bot" data-mouth-animation="audio-energy">
+    <div id="voice-host-stage">
+      <svg id="voice-host-art" viewBox="0 0 540 580" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="voice-host-title voice-host-description">
+        <title id="voice-host-title">声稿原创虚拟讲解员</title>
+        <desc id="voice-host-description">暖白外壳、梅紫关节、深墨屏幕的小机器人；嘴部随配音音量开合。</desc>
+        <ellipse id="voice-host-shadow" cx="270" cy="507" rx="150" ry="16" fill="#29252c" opacity=".1"/>
+        <g id="voice-host-rig" stroke-linecap="round" stroke-linejoin="round">
+          <g id="voice-host-legs" stroke="#29252c" stroke-width="8">
+            <path d="M224 444V481M316 444V481" fill="none" stroke-width="22"/>
+            <rect x="174" y="471" width="91" height="32" rx="16" fill="#76566f"/>
+            <rect x="275" y="471" width="91" height="32" rx="16" fill="#76566f"/>
+          </g>
+          <g id="voice-host-left-arm">
+            <path d="M180 337Q126 350 118 398" fill="none" stroke="#29252c" stroke-width="39"/>
+            <path d="M180 337Q126 350 118 398" fill="none" stroke="#f4f0e8" stroke-width="24"/>
+            <ellipse cx="115" cy="410" rx="25" ry="24" fill="#f4f0e8" stroke="#29252c" stroke-width="8"/>
+            <path d="M101 410L107 418M116 413L121 421" fill="none" stroke="#76566f" stroke-width="4"/>
+          </g>
+          <g id="voice-host-right-arm">
+            <path d="M360 338Q410 328 426 283" fill="none" stroke="#29252c" stroke-width="39"/>
+            <path d="M360 338Q410 328 426 283" fill="none" stroke="#f4f0e8" stroke-width="24"/>
+            <path d="M418 261V231Q418 222 426 222Q434 222 434 231V254" fill="#f4f0e8" stroke="#29252c" stroke-width="8"/>
+            <path d="M409 261Q413 249 424 255L444 264Q453 268 449 282L442 295Q436 303 423 297L408 287Q397 280 404 270Z" fill="#f4f0e8" stroke="#29252c" stroke-width="8"/>
+            <path d="M424 272L438 279" fill="none" stroke="#76566f" stroke-width="4"/>
+          </g>
+          <rect x="242" y="267" width="56" height="51" rx="18" fill="#29252c"/>
+          <g id="voice-host-body" stroke="#29252c" stroke-width="8">
+            <rect x="174" y="302" width="192" height="157" rx="47" fill="#f4f0e8"/>
+            <rect x="202" y="329" width="136" height="101" rx="26" fill="#e2d8df" stroke-width="0"/>
+            <path d="M230 375L247 392L279 358" fill="none" stroke="#76566f" stroke-width="9"/>
+            <circle cx="311" cy="353" r="8" fill="#78a6a0" stroke-width="0"/>
+            <path d="M232 414H307" fill="none" stroke="#bca9b7" stroke-width="5"/>
+          </g>
+          <g id="voice-host-head">
+            <path d="M270 108V61" fill="none" stroke="#29252c" stroke-width="9"/>
+            <circle cx="270" cy="48" r="17" fill="#76566f" stroke="#29252c" stroke-width="8"/>
+            <rect x="62" y="168" width="45" height="66" rx="20" fill="#76566f" stroke="#29252c" stroke-width="8"/>
+            <rect x="433" y="168" width="45" height="66" rx="20" fill="#76566f" stroke="#29252c" stroke-width="8"/>
+            <rect x="88" y="102" width="364" height="202" rx="64" fill="#f4f0e8" stroke="#29252c" stroke-width="9"/>
+            <rect x="114" y="126" width="312" height="150" rx="43" fill="#29252c"/>
+            <path d="M141 151Q156 139 176 141" fill="none" stroke="#60545f" stroke-width="5"/>
+            <ellipse id="voice-host-eye-left" cx="217" cy="187" rx="12" ry="20" fill="#f4f0e8"/>
+            <ellipse id="voice-host-eye-right" cx="322" cy="184" rx="12" ry="20" fill="#f4f0e8"/>
+            <circle cx="165" cy="224" r="11" fill="#76566f"/>
+            <circle cx="375" cy="224" r="11" fill="#76566f"/>
+            <ellipse id="voice-host-mouth" cx="270" cy="236" rx="28" ry="2.88" fill="#f4f0e8"/>
+            <circle cx="400" cy="148" r="5" fill="#78a6a0"/>
+          </g>
+        </g>
+        <text id="voice-host-label" x="270" y="554" text-anchor="middle">虚拟讲解员</text>
+      </svg>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({paused: true});
+    const duration = @@DURATION@@;
+    const envelope = @@ENVELOPE@@;
+    const mouth = '#voice-host-mouth';
+    tl.set(mouth, {attr: {ry: 2.88, rx: 28}, immediateRender: true}, 0);
+    tl.set('#voice-host-eye-left', {attr: {ry: 20}, immediateRender: true}, 0);
+    tl.set('#voice-host-eye-right', {attr: {ry: 20}, immediateRender: true}, 0);
+    tl.set('#voice-host-rig', {y: 0, immediateRender: true}, 0);
+    tl.set('#voice-host-head', {svgOrigin: '270 294', rotation: -.7, immediateRender: true}, 0);
+    tl.set('#voice-host-left-arm', {svgOrigin: '180 337', rotation: 0, immediateRender: true}, 0);
+    tl.set('#voice-host-right-arm', {svgOrigin: '360 338', rotation: 5, immediateRender: true}, 0);
+    const bounded = (start, length) => Math.max(0, Math.min(length, duration - start));
+    for (let index = 0; index < envelope.levels.length; index += 1) {
+      const at = index / envelope.sample_hz;
+      const previous = index ? envelope.levels[index - 1] : envelope.levels[0];
+      const current = envelope.levels[index];
+      tl.fromTo(mouth, {attr: {ry: 2.88 + 15.12 * previous, rx: 28 - 2.24 * previous}},
+        {attr: {ry: 2.88 + 15.12 * current, rx: 28 - 2.24 * current}, duration: bounded(at, 1 / envelope.sample_hz), ease: 'none', immediateRender: false}, at);
+    }
+    for (let at = 0; at < duration; at += 4.8) {
+      tl.fromTo('#voice-host-rig', {y: 0}, {y: -4, duration: bounded(at, 2.4), ease: 'sine.inOut', immediateRender: false}, at);
+      if (at + 2.4 < duration) tl.fromTo('#voice-host-rig', {y: -4}, {y: 0, duration: bounded(at + 2.4, 2.4), ease: 'sine.inOut', immediateRender: false}, at + 2.4);
+      tl.fromTo('#voice-host-head', {rotation: -.7}, {rotation: .7, duration: bounded(at, 2.7), ease: 'sine.inOut', immediateRender: false}, at);
+      if (at + 2.7 < duration) tl.fromTo('#voice-host-head', {rotation: .7}, {rotation: -.7, duration: bounded(at + 2.7, 2.1), ease: 'sine.inOut', immediateRender: false}, at + 2.7);
+    }
+    for (let at = 2.1; at + .23 < duration; at += 4.4) {
+      tl.fromTo('#voice-host-eye-left', {attr: {ry: 20}}, {attr: {ry: 2.4}, duration: .07, ease: 'power1.in', immediateRender: false}, at);
+      tl.fromTo('#voice-host-eye-left', {attr: {ry: 2.4}}, {attr: {ry: 20}, duration: .13, ease: 'power1.out', immediateRender: false}, at + .07);
+      tl.fromTo('#voice-host-eye-right', {attr: {ry: 20}}, {attr: {ry: 2.4}, duration: .07, ease: 'power1.in', immediateRender: false}, at + .025);
+      tl.fromTo('#voice-host-eye-right', {attr: {ry: 2.4}}, {attr: {ry: 20}, duration: .13, ease: 'power1.out', immediateRender: false}, at + .095);
+    }
+    for (let at = .6; at < duration; at += 7.2) {
+      tl.fromTo('#voice-host-right-arm', {rotation: 5}, {rotation: -6, duration: bounded(at, .7), ease: 'sine.inOut', immediateRender: false}, at);
+      if (at + .7 < duration) tl.fromTo('#voice-host-right-arm', {rotation: -6}, {rotation: 5, duration: bounded(at + .7, 1.2), ease: 'sine.inOut', immediateRender: false}, at + .7);
+      if (at + .3 < duration) tl.fromTo('#voice-host-left-arm', {rotation: 0}, {rotation: 3, duration: bounded(at + .3, 1), ease: 'sine.inOut', immediateRender: false}, at + .3);
+      if (at + 1.3 < duration) tl.fromTo('#voice-host-left-arm', {rotation: 3}, {rotation: 0, duration: bounded(at + 1.3, 1.1), ease: 'sine.inOut', immediateRender: false}, at + 1.3);
+    }
+    window.__timelines['voice-host'] = tl;
+  </script>
+</template>

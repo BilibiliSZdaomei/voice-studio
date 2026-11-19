@@ -1,0 +1,11 @@
+[project]
+name = "voice-studio"
+version = "0.3.1"
+description = "Local-first, editable narration projects using your own voice"
+requires-python = ">=3.12"
+dependencies = []
+
+[tool.voice-studio]
+api-path = "apps/api"
+web-path = "apps/web"
+model-runtime = "Separate Python runtime; see config/local.example.json"

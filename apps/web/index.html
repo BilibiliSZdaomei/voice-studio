@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f5f3ed">
+  <title>声稿 · Voice Studio</title>
+  <meta name="description" content="本地个人声线配音工作台。编辑文案、分段生成、试听与导出。">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/production.css">
+  <script type="module" src="/app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#workspace">跳到文案工作区</a>
+  <div class="studio-shell">
+    <aside class="sidebar" aria-label="项目导航">
+      <a class="brand" href="/" aria-label="声稿首页">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+        <span><strong>声稿<span class="brand-dot">.</span></strong><small>VOICE STUDIO</small></span>
+      </a>
+      <button class="button primary new-project" id="new-project"><span aria-hidden="true">＋</span> 新建配音项目</button>
+      <div class="library-actions" aria-label="制作管理"><button class="text-button" id="open-batch">批量导入</button><button class="text-button" id="open-resources">生产资料</button><button class="text-button" id="open-jobs">任务 <span id="job-count">0</span></button></div>
+      <div class="sidebar-label"><span>我的项目</span><span id="project-count">0</span></div>
+      <nav id="project-list" class="project-list" aria-label="配音项目列表"><p class="muted sidebar-empty">正在读取项目…</p></nav>
+      <div class="sidebar-bottom"><span class="local-dot" aria-hidden="true"></span><div><strong>本地工作空间</strong><p>参考录音与配音留在这台电脑</p></div></div>
+    </aside>
+
+    <div class="main-column">
+      <header class="topbar">
+        <div class="breadcrumb"><span>工作空间</span><span aria-hidden="true">/</span><strong id="breadcrumb-title">配音制作</strong></div>
+        <div class="engine-state" id="engine-state"><span class="status-dot" aria-hidden="true"></span><span>正在连接</span></div>
+      </header>
+
+      <div class="workspace-grid">
+        <main class="workspace" id="workspace" tabindex="-1">
+          <div class="workspace-heading"><div><p class="eyebrow">NARRATION WORKSPACE</p><h1 id="page-title">配音制作</h1><p class="heading-note" id="heading-note">从一篇文案开始，用你的声音讲述。</p></div><span class="edition">本地版 <span id="app-version"></span></span></div>
+
+          <div id="alert" class="alert" role="alert" hidden><p id="alert-text"></p><button class="text-button" id="reload-project" hidden>重新载入项目</button><button class="icon-button dismiss-alert" id="dismiss-alert" aria-label="关闭提示">×</button></div>
+
+          <section class="empty-workspace" id="empty-workspace" aria-labelledby="empty-title">
+            <div class="empty-score" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+            <p class="eyebrow">YOUR VOICE, YOUR WORDS</p>
+            <h2 id="empty-title">准备好你的第一篇声稿</h2>
+            <p>写下想说的话，逐段生成、试听和修改。<br>满意的片段可以保留，改一句就重做一句。</p>
+            <button class="button primary" id="empty-create">新建配音项目 <span aria-hidden="true">↗</span></button>
+            <div class="workflow-note"><span><b>01</b> 编辑文案</span><span><b>02</b> 分段试听</span><span><b>03</b> 导出成品</span></div>
+          </section>
+
+          <section id="project-workspace" hidden aria-label="当前项目">
+            <div class="editor-toolbar"><div class="editor-tabs" role="tablist" aria-label="文案编辑方式"><button id="tab-script" class="editor-tab active" role="tab" aria-selected="true" aria-controls="panel-script">完整文案</button><button id="tab-segments" class="editor-tab" role="tab" aria-selected="false" aria-controls="panel-segments" tabindex="-1">逐段编辑 <span id="segment-count">0</span></button></div><label class="file-button" for="import-file">导入文案 <span aria-hidden="true">↥</span></label><input type="file" id="import-file" accept=".txt,.md,text/plain,text/markdown" hidden></div>
+            <div class="project-tools"><button class="text-button" id="open-text-tools">文案整理与读法 <span aria-hidden="true">↗</span></button><span class="muted" id="dictionary-snapshot-note">使用项目保存的读法</span></div>
+
+            <div id="panel-script" role="tabpanel" aria-labelledby="tab-script">
+              <label class="field-label" for="project-title">项目名称</label>
+              <input id="project-title" class="title-input" maxlength="100" placeholder="给这篇声稿起个名字" autocomplete="off">
+              <div class="script-label-row"><label class="field-label" for="script-editor">口播文案</label><span id="script-count" class="muted">0 字</span></div>
+              <textarea id="script-editor" class="script-editor" maxlength="30000" placeholder="在这里写下你想说的话，按正常标点断句。" spellcheck="false"></textarea>
+              <div class="editor-meta"><span class="muted" id="save-state">修改后保存，自动拆分语句。</span><button class="button secondary" id="save-project">保存并分段</button></div>
+            </div>
+
+            <div id="panel-segments" role="tabpanel" aria-labelledby="tab-segments" hidden><div class="segment-intro"><p>逐段调整文案，保留已经满意的配音。</p><span id="ready-count">0 / 0 已生成</span></div><div id="segments-list" class="segments-list"></div></div>
+
+            <div class="generation-bar"><div><strong id="generation-title">准备生成</strong><p id="generation-note">先保存文案，再开始配音。</p></div><button class="button primary" id="generate-project"><span class="small-wave" aria-hidden="true">▥</span> 生成待完成片段</button></div>
+
+            <section class="task-panel" id="task-panel" aria-label="配音生成进度" hidden><div class="task-row"><span class="task-indicator" aria-hidden="true"></span><strong id="task-label">正在生成</strong><span id="task-progress-label">0 / 0</span><button class="text-button" id="cancel-job">取消任务</button></div><progress id="task-progress" max="1" value="0" aria-label="已完成片段"></progress><p id="task-note" class="muted">本地生成可能需要一些时间，可以保留此页面等待。</p></section>
+
+            <section class="export-section" aria-labelledby="export-title"><div class="export-heading"><div><h2 id="export-title">成品导出</h2><p>拼接完整配音，并生成按段对齐的字幕。</p></div><button class="button secondary" id="export-project">生成导出文件 <span aria-hidden="true">↗</span></button></div><div id="export-links" class="export-links" hidden></div><p class="muted export-note" id="export-note">全部片段生成后即可导出。新配音请先试听确认。</p></section>
+            <section class="video-export" aria-labelledby="video-title">
+              <h2 id="video-title">讲解视频</h2><p class="muted" id="video-note">完成当前配音导出后，可制作讲解视频。</p>
+              <div class="video-actions">
+                <div class="video-field"><label for="video-layout">画面形式</label><select id="video-layout" class="compact-select" aria-describedby="video-note"><option value="virtual_host">虚拟讲解员</option><option value="captions">纯字幕讲解</option></select></div>
+                <div class="video-field"><label for="video-aspect">视频比例</label><select id="video-aspect" class="compact-select"><option value="16:9">横屏 16:9</option><option value="9:16">竖屏 9:16</option></select></div>
+                <button class="button secondary" id="export-video">导出讲解视频</button>
+              </div>
+              <div class="video-host-preview" id="video-host-preview">
+                <svg class="studio-bot-preview" viewBox="0 0 540 540" role="img" aria-label="原创小机器人预览"><ellipse cx="270" cy="507" rx="150" ry="16" fill="#29252c" opacity=".1"/>
+        <g stroke-linecap="round" stroke-linejoin="round">
+          <g stroke="#29252c" stroke-width="8">
+            <path d="M224 444V481M316 444V481" fill="none" stroke-width="22"/>
+            <rect x="174" y="471" width="91" height="32" rx="16" fill="#76566f"/>
+            <rect x="275" y="471" width="91" height="32" rx="16" fill="#76566f"/>
+          </g>
+          <g>
+            <path d="M180 337Q126 350 118 398" fill="none" stroke="#29252c" stroke-width="39"/>
+            <path d="M180 337Q126 350 118 398" fill="none" stroke="#f4f0e8" stroke-width="24"/>
+            <ellipse cx="115" cy="410" rx="25" ry="24" fill="#f4f0e8" stroke="#29252c" stroke-width="8"/>
+            <path d="M101 410L107 418M116 413L121 421" fill="none" stroke="#76566f" stroke-width="4"/>
+          </g>
+          <g>
+            <path d="M360 338Q410 328 426 283" fill="none" stroke="#29252c" stroke-width="39"/>
+            <path d="M360 338Q410 328 426 283" fill="none" stroke="#f4f0e8" stroke-width="24"/>
+            <path d="M418 261V231Q418 222 426 222Q434 222 434 231V254" fill="#f4f0e8" stroke="#29252c" stroke-width="8"/>
+            <path d="M409 261Q413 249 424 255L444 264Q453 268 449 282L442 295Q436 303 423 297L408 287Q397 280 404 270Z" fill="#f4f0e8" stroke="#29252c" stroke-width="8"/>
+            <path d="M424 272L438 279" fill="none" stroke="#76566f" stroke-width="4"/>
+          </g>
+          <rect x="242" y="267" width="56" height="51" rx="18" fill="#29252c"/>
+          <g stroke="#29252c" stroke-width="8">
+            <rect x="174" y="302" width="192" height="157" rx="47" fill="#f4f0e8"/>
+            <rect x="202" y="329" width="136" height="101" rx="26" fill="#e2d8df" stroke-width="0"/>
+            <path d="M230 375L247 392L279 358" fill="none" stroke="#76566f" stroke-width="9"/>
+            <circle cx="311" cy="353" r="8" fill="#78a6a0" stroke-width="0"/>
+            <path d="M232 414H307" fill="none" stroke="#bca9b7" stroke-width="5"/>
+          </g>
+          <g>
+            <path d="M270 108V61" fill="none" stroke="#29252c" stroke-width="9"/>
+            <circle cx="270" cy="48" r="17" fill="#76566f" stroke="#29252c" stroke-width="8"/>
+            <rect x="62" y="168" width="45" height="66" rx="20" fill="#76566f" stroke="#29252c" stroke-width="8"/>
+            <rect x="433" y="168" width="45" height="66" rx="20" fill="#76566f" stroke="#29252c" stroke-width="8"/>
+            <rect x="88" y="102" width="364" height="202" rx="64" fill="#f4f0e8" stroke="#29252c" stroke-width="9"/>
+            <rect x="114" y="126" width="312" height="150" rx="43" fill="#29252c"/>
+            <path d="M141 151Q156 139 176 141" fill="none" stroke="#60545f" stroke-width="5"/>
+            <ellipse cx="217" cy="187" rx="12" ry="20" fill="#f4f0e8"/>
+            <ellipse cx="322" cy="184" rx="12" ry="20" fill="#f4f0e8"/>
+            <circle cx="165" cy="224" r="11" fill="#76566f"/>
+            <circle cx="375" cy="224" r="11" fill="#76566f"/>
+            <ellipse cx="270" cy="236" rx="28" ry="3" fill="#f4f0e8"/>
+            <circle cx="400" cy="148" r="5" fill="#78a6a0"/>
+          </g>
+        </g></svg>
+                <div><strong>小机器人 <span>原创虚拟形象</span></strong><p>使用你的配音，小机器人随声音开口、眨眼。无需照片或视频。</p></div>
+              </div>
+              <div id="video-links" class="export-links" hidden></div>
+            </section>
+          </section>
+        </main>
+
+        <aside class="inspector" aria-label="声线与生成设置">
+          <section class="voice-section"><div class="inspector-heading"><h2>当前声线</h2><button class="text-button" id="manage-voices">管理</button></div><div class="voice-identity"><div class="voice-avatar" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div><div><h3 id="voice-name">我的声线</h3><p>本地参考声音</p></div></div><label class="sr-only" for="project-voice">选择项目声线</label><select id="project-voice" class="form-input voice-select" aria-label="选择项目声线"><option value="default">我的声线</option></select><button class="text-button refresh-project-voice" id="refresh-project-voice" hidden>更新为最新声线档案</button><div class="voice-status"><span class="local-dot" aria-hidden="true"></span><span id="voice-acceptance">正在读取声线</span></div><label class="sample-label" for="reference-player" hidden>参考样音</label><audio id="reference-player" hidden controls preload="none" aria-label="试听声线样音"></audio><p class="inspector-note" id="voice-scope"></p></section>
+          <section class="settings-section"><h2>生成设置</h2><form id="settings-form"><div class="setting-label"><label for="speed">语速</label><output id="speed-value" for="speed">1.00×</output></div><input type="range" id="speed" min="0.75" max="1.25" step="0.05" value="1"><div class="range-labels"><span>从容</span><span>自然</span><span>紧凑</span></div><div class="setting-label pause-label"><label for="pause">句间停顿</label><span>秒</span></div><input class="number-input" id="pause" type="number" min="0" max="2" step="0.01" value="0.28"><p class="inspector-note">语速改变后需要重新生成。调整停顿只需重新导出。</p><button class="button secondary settings-save" id="save-settings" type="submit">保存设置</button></form></section>
+          <section class="session-section"><h2>制作提示</h2><ol><li><span>01</span> 确认文案中的数字和专有名词。</li><li><span>02</span> 先试听片段，再导出完整配音。</li><li><span>03</span> 只改动需要调整的句子。</li></ol><p class="privacy-note"><span aria-hidden="true">⌂</span> 当前配音在本机生成<br><span class="privacy-indent">无需上传你的参考录音</span></p></section>
+        </aside>
+      </div>
+
+      <footer class="player-bar" aria-label="音频试听"><div class="player-caption"><span class="player-symbol" aria-hidden="true">▷</span><div><strong id="player-title">片段试听</strong><p id="player-subtitle">选择已生成片段，开始试听</p></div></div><audio id="main-player" controls preload="none" aria-label="当前配音试听"></audio><span class="player-tag" id="player-tag">尚未选择</span></footer>
+    </div>
+  </div>
+
+  <dialog id="new-project-dialog" aria-labelledby="dialog-title"><form id="new-project-form"><div class="dialog-heading"><div><p class="eyebrow">NEW NARRATION</p><h2 id="dialog-title">新建配音项目</h2></div><button type="button" class="icon-button" id="close-dialog" aria-label="关闭新建项目">×</button></div><label class="field-label" for="new-title">项目名称</label><input id="new-title" name="title" class="form-input" maxlength="100" required placeholder="例如：我的项目介绍" autocomplete="off"><div class="template-label"><span class="field-label">从一份起稿开始</span><span class="muted">可直接编辑</span></div><div class="template-options"><button type="button" class="template-option" data-template="intro">项目介绍</button><button type="button" class="template-option" data-template="experience">经验分享</button><button type="button" class="template-option" data-template="tutorial">教程讲解</button></div><label class="field-label" for="new-script">口播文案</label><textarea id="new-script" name="script" class="form-input new-script" maxlength="30000" required placeholder="粘贴你的文案，或选择上方起稿模板。"></textarea><p id="new-project-error" class="dialog-error" role="alert" hidden></p><div class="dialog-footer"><button type="button" class="button ghost" id="cancel-dialog">取消</button><button type="submit" class="button primary" id="create-project">创建项目</button></div></form></dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+  <div id="production-dialogs"></div>
+</body>
+</html>

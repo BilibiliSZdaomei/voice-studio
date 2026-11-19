@@ -1,0 +1,37 @@
+<template>
+  <style>
+    @font-face { font-family: Caption; src: url('assets/fonts/caption-font.ttc'); font-weight: 100 900; }
+    * { box-sizing: border-box; }
+    #root { position: absolute; inset: 0; width: 100%; height: 100%; overflow: hidden; background: #f4f0e8; font-family: Caption, sans-serif; color: #29252c; }
+    .frame { position: absolute; inset: 0; padding: 90px 120px; display: flex; flex-direction: column; justify-content: space-between; }
+    .brand { color: #76566f; font-size: 32px; letter-spacing: 8px; margin: 0 0 22px; }
+    .title { margin: 0; font-size: @@TITLE_SIZE@@px; font-weight: 500; max-width: 1400px; line-height: 1.45; overflow-wrap: anywhere; }
+    .rule { height: 2px; background: #d5cbd0; margin-top: 36px; }
+    .footer { display: flex; justify-content: space-between; gap: 60px; font-size: 28px; color: #675b67; }
+    .caption-card { position: absolute; inset: 310px 160px 205px; display: flex; align-items: center; }
+    .caption-inner { width: 100%; }
+    .segment-label { font-size: 28px; color: #76566f; letter-spacing: 4px; margin-bottom: 36px; }
+    .caption { font-size: 68px; line-height: 1.55; font-weight: 500; margin: 0; max-width: 1500px; overflow-wrap: anywhere; }
+    .progress-track { position: absolute; height: 9px; left: 0; right: 0; bottom: 0; background: #e5dce3; }
+    #progress { height: 100%; width: 100%; background: #76566f; transform-origin: left center; }
+    @@PORTRAIT_STYLE@@
+  </style>
+  <div id="root" class="@@ORIENTATION@@" data-composition-id="voice-caption" data-start="0" data-width="@@WIDTH@@" data-height="@@HEIGHT@@" data-duration="@@DURATION@@">
+    <div class="frame">
+      <header><p class="brand">声稿 / VOICE STUDIO</p><h1 class="title">@@TITLE@@</h1><div class="rule"></div></header>
+      <footer class="footer"><span>让文字，以自己的声音表达。</span><span>本地配音 · 字幕讲解</span></footer>
+    </div>
+    @@CARDS@@
+    <div class="progress-track"><div id="progress"></div></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({paused: true});
+    tl.fromTo('#progress', {scaleX: 0}, {scaleX: 1, duration: @@DURATION@@, ease: 'none'}, 0);
+    document.querySelectorAll('.caption-card').forEach(card => {
+      const start = Number(card.dataset.start);
+      const duration = Math.min(.18, Number(card.dataset.duration) / 4);
+      tl.fromTo(card.querySelector('.caption-inner'), {opacity: 0}, {opacity: 1, duration, ease: 'none'}, start);
+    });
+    window.__timelines['voice-caption'] = tl;
+  </script>
+</template>
